@@ -13,10 +13,13 @@ public class Currency {
         System.out.print("Enter amount in USD: ");
         double amount = sc.nextDouble();
 
+        System.out.print("Enter the exchange rate: (e.g. USD to EUR = 0.85): ");
+        double exchangeRate = sc.nextDouble();
+
         // Calculation ( 1 USD = 0,85 EUR )
-        amount = amount * 0.85;
+        amount = amount * exchangeRate;
 
         // Output
-        System.out.println("Amount in EUR = " + amount);
+        System.out.println("Amount = " + amount);
     }
 }
