@@ -24,3 +24,31 @@ public class Palindrome {
         }
     }
 }
+
+
+// alternative sol using loops:
+//  Scanner sc = new Scanner(System.in);
+//
+//  // Input
+//  System.out.println("Enter a word: ");
+//  String string = sc.nextLine().trim();
+//
+//  boolean isPalindrome = true;
+//
+//  // two pointers, 1 start from the beginning and the other starts from the end,
+//  // and we compare them until we reach the middle
+//  for (int i = 0; i < string.length() / 2; i++) {
+//      char start = Character.toLowerCase(string.charAt(i));
+//      char end = Character.toLowerCase(string.charAt(string.length() - 1 - i));
+//
+//      if (start != end) {
+//          isPalindrome = false;
+//        break;
+//        }
+//      }
+//
+//  if (isPalindrome) {
+//      System.out.println("Palindrome");
+//  } else {
+//      System.out.println("Not a palindrome");
+//  }
