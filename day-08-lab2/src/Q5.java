@@ -27,7 +27,14 @@ public class Q5 {
 
             switch (choice) {
                 case 1:
-                    acceptArray(arr);
+                    for (int i = 0; i < arr.length; i++) {
+                        System.out.print("Enter the " + i + " element: ");
+                        arr[i] = sc.nextInt();
+                    }
+
+                    System.out.println("\nArray has been updated successfully: " + Arrays.toString(arr));
+                    // case 1 was utilizing this method but since the need of passing sc, I made it in place.
+//                    acceptArray(arr, sc);
                     break;
                 case 2:
                     displayArray(arr);
@@ -55,8 +62,7 @@ public class Q5 {
                 "5. To Stop");
     }
 
-    public static void acceptArray(int[] arr) {
-        Scanner sc = new Scanner(System.in);
+    public static void acceptArray(int[] arr, Scanner sc) {
 
         for (int i = 0; i < arr.length; i++) {
             System.out.print("Enter the " + i + " element: ");
