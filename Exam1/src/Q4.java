@@ -24,7 +24,7 @@ public class Q4 {
                 System.out.println(num + " is a negative number");
             } else {
                 // we can disregard this if the array is constant
-                // (by removing tge else if condition and turning
+                // (by removing the -else if- condition and turning
                 // this Sout to print negative numbers.
                 System.out.println(num + " is a zero");
             }
