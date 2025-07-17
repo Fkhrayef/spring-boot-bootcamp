@@ -1,0 +1,248 @@
+{
+  "info": {
+    "name": "Task API Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get All Tasks",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/tasks",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "tasks"
+          ],
+          "query": []
+        }
+      }
+    },
+    {
+      "name": "Add Task",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/tasks",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "tasks"
+          ],
+          "query": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Homework\",\n  \"description\": \"Math assignment\",\n  \"status\": false\n}"
+        }
+      }
+    },
+    {
+      "name": "Get Task By ID (exists)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/tasks/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "tasks",
+            "1"
+          ],
+          "query": []
+        }
+      }
+    },
+    {
+      "name": "Get Task By ID (not found)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/tasks/999",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "tasks",
+            "999"
+          ],
+          "query": []
+        }
+      }
+    },
+    {
+      "name": "Search Tasks (match)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/tasks/search?query=home",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "tasks",
+            "search?query=home"
+          ],
+          "query": []
+        }
+      }
+    },
+    {
+      "name": "Search Tasks (no match)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/tasks/search?query=xyz",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "tasks",
+            "search?query=xyz"
+          ],
+          "query": []
+        }
+      }
+    },
+    {
+      "name": "Update Task (exists)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/tasks/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "tasks",
+            "1"
+          ],
+          "query": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Homework Updated\",\n  \"description\": \"Science now\",\n  \"status\": true\n}"
+        }
+      }
+    },
+    {
+      "name": "Update Task (not found)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/tasks/999",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "tasks",
+            "999"
+          ],
+          "query": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Ghost\",\n  \"description\": \"none\",\n  \"status\": false\n}"
+        }
+      }
+    },
+    {
+      "name": "Delete Task (exists)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/tasks/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "tasks",
+            "1"
+          ],
+          "query": []
+        }
+      }
+    },
+    {
+      "name": "Delete Task (not found)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/tasks/999",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "tasks",
+            "999"
+          ],
+          "query": []
+        }
+      }
+    }
+  ]
+}

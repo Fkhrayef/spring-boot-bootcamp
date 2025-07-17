@@ -1,0 +1,348 @@
+{
+  "info": {
+    "name": "Customer API Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get All Customers",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/customers",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "customers"
+          ],
+          "query": []
+        }
+      }
+    },
+    {
+      "name": "Add Customer (Invalid Balance)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/customers",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "customers"
+          ],
+          "query": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"alice\",\n  \"balance\": -10\n}"
+        }
+      }
+    },
+    {
+      "name": "Add Customer (Valid)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/customers",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "customers"
+          ],
+          "query": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"bob\",\n  \"balance\": 100.0\n}"
+        }
+      }
+    },
+    {
+      "name": "Get Customer By ID (exists)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/customers/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "customers",
+            "1"
+          ],
+          "query": []
+        }
+      }
+    },
+    {
+      "name": "Get Customer By ID (not found)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/customers/999",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "customers",
+            "999"
+          ],
+          "query": []
+        }
+      }
+    },
+    {
+      "name": "Update Customer (exists)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/customers/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "customers",
+            "1"
+          ],
+          "query": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"bob-updated\",\n  \"balance\": 200\n}"
+        }
+      }
+    },
+    {
+      "name": "Update Customer (not found)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/customers/999",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "customers",
+            "999"
+          ],
+          "query": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"ghost\",\n  \"balance\": 50\n}"
+        }
+      }
+    },
+    {
+      "name": "Deposit Customer (exists)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/customers/1/deposit?amount=50",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "customers",
+            "1",
+            "deposit?amount=50"
+          ],
+          "query": []
+        }
+      }
+    },
+    {
+      "name": "Deposit Customer (not found)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/customers/999/deposit?amount=50",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "customers",
+            "999",
+            "deposit?amount=50"
+          ],
+          "query": []
+        }
+      }
+    },
+    {
+      "name": "Withdraw Customer (exists, sufficient)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/customers/1/withdrawal?amount=100",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "customers",
+            "1",
+            "withdrawal?amount=100"
+          ],
+          "query": []
+        }
+      }
+    },
+    {
+      "name": "Withdraw Customer (insufficient)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/customers/1/withdrawal?amount=9999",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "customers",
+            "1",
+            "withdrawal?amount=9999"
+          ],
+          "query": []
+        }
+      }
+    },
+    {
+      "name": "Withdraw Customer (not found)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/customers/999/withdrawal?amount=10",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "customers",
+            "999",
+            "withdrawal?amount=10"
+          ],
+          "query": []
+        }
+      }
+    },
+    {
+      "name": "Delete Customer (exists)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/customers/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "customers",
+            "1"
+          ],
+          "query": []
+        }
+      }
+    },
+    {
+      "name": "Delete Customer (not found)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/customers/999",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "customers",
+            "999"
+          ],
+          "query": []
+        }
+      }
+    }
+  ]
+}
