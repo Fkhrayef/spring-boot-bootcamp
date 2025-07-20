@@ -7,17 +7,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 
 @RestController
-@RequestMapping("/api/v1/events")
+@RequestMapping("/api/v1/")
 public class EventController {
 
     ArrayList<Event> events = new ArrayList<>();
 
-    @GetMapping("")
+    @GetMapping("get/events")
     public ArrayList<Event> getEvents(){
         return events;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("get/events/{id}")
     public Event getEventById(@PathVariable int id){
         for(Event e : events){
             if(e.getId() == id){
@@ -27,7 +27,7 @@ public class EventController {
         return null;
     }
 
-    @PostMapping("")
+    @PostMapping("add/event")
     public ApiResponse addEvent(@RequestBody Event event) {
         // Validations
         if(event.getCapacity() < 0) {
@@ -36,18 +36,18 @@ public class EventController {
         if(event.getStartDate().isAfter(event.getEndDate())) {
             return new ApiResponse("Start Date must be before End Date!", "400");
         }
-
-        int id = 1;
-        if (!events.isEmpty()) {
-            id = events.get(events.size() - 1).getId() + 1;
+        for (Event e : events) {
+            if (e.getId() == event.getId()) {
+                return new ApiResponse("Event ID Already Exists!", "400");
+            }
         }
 
         // Add event
-        events.add(new Event(id, event.getDescription(), event.getCapacity(), event.getStartDate(), event.getEndDate()));
+        events.add(new Event(event.getId(), event.getDescription(), event.getCapacity(), event.getStartDate(), event.getEndDate()));
         return new ApiResponse("Event Added Successfully!", "200");
     }
 
-    @PutMapping("/{eventId}")
+    @PutMapping("update/events/{eventId}")
     public ApiResponse updateEvent(@PathVariable("eventId") int eventId, @RequestBody Event event) {
         // Validations
         if(event.getCapacity() < 0) {
@@ -78,7 +78,7 @@ public class EventController {
         }
     }
 
-    @PutMapping("/{eventId}/capacity")
+    @PutMapping("update/events/{eventId}/capacity")
     public ApiResponse changeCapacity(@PathVariable("eventId") int eventId, @RequestParam int capacity) {
         // Validations
         if(capacity < 0) {
@@ -104,7 +104,7 @@ public class EventController {
 
     }
 
-    @DeleteMapping("/{eventId}")
+    @DeleteMapping("delete/events/{eventId}")
     public ApiResponse deleteEvent(@PathVariable("eventId") int eventId) {
         // Get the event by its id
         Event eventToDelete = null;

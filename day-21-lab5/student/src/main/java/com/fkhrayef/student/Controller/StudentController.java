@@ -7,17 +7,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 
 @RestController
-@RequestMapping("/api/v1/students")
+@RequestMapping("/api/v1/")
 public class StudentController {
 
     ArrayList<Student> students = new ArrayList<>();
 
-    @GetMapping("")
+    @GetMapping("get/students")
     public ArrayList<Student> getStudents(){
         return students;
     }
 
-    @GetMapping("/{studentId}/honors-classification")
+    @GetMapping("get/students/{studentId}/honors-classification")
     public ApiResponse getStudentDegree(@PathVariable int studentId){
         Student student = null;
         for (Student s : students) {
@@ -33,7 +33,7 @@ public class StudentController {
         }
     }
 
-    @GetMapping("/above-average")
+    @GetMapping("get/students/above-average")
     public ArrayList<Student> getAboveAverage(){
         ArrayList<Student> aboveAverage = new ArrayList<>();
 
@@ -55,18 +55,19 @@ public class StudentController {
         return aboveAverage;
     }
 
-    @PostMapping("")
+    @PostMapping("add/student")
     public ApiResponse addStudent(@RequestBody Student student){
-        int id = 1;
-        if (!students.isEmpty()) {
-            id = students.get(students.size() - 1).getId() + 1;
+        for (Student s : students) {
+            if (s.getId() == student.getId()) {
+                return new ApiResponse("Student ID Already Exists!", "400");
+            }
         }
         String degree = student.getGPA() >= 4.75 ? "First Honors" : student.getGPA() >= 4.25 ? "Second Honors" : "N/A";
-        students.add(new Student(id, student.getName(), student.getAge(), degree, student.getGPA()));
-        return new ApiResponse("Task Added Successfully!", "200");
+        students.add(new Student(student.getId(), student.getName(), student.getAge(), degree, student.getGPA()));
+        return new ApiResponse("Student Added Successfully!", "200");
     }
 
-    @PutMapping("/{studentId}")
+    @PutMapping("update/students/{studentId}")
     public ApiResponse updateStudent(@PathVariable int studentId, @RequestBody Student student){
         // Get the student by their id
         Student studentToUpdate = null;
@@ -105,7 +106,7 @@ public class StudentController {
 //        return students;
 //    }
 
-    @DeleteMapping("/{studentId}")
+    @DeleteMapping("delete/students/{studentId}")
     public ApiResponse deleteStudent(@PathVariable int studentId){
         // Get the student by their id
         Student studentToDelete = null;

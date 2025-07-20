@@ -7,17 +7,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 
 @RestController
-@RequestMapping("/api/v1/projects")
+@RequestMapping("/api/v1/")
 public class ProjectController {
 
     ArrayList<Project> projects = new ArrayList<>();
 
-    @GetMapping("")
+    @GetMapping("get/projects")
     public ArrayList<Project> getAllProjects(){
         return projects;
     }
 
-    @GetMapping("/search")
+    @GetMapping("get/projects/search")
     public ArrayList<Project> searchProjects(@RequestParam("query") String query) {
         ArrayList<Project> candidates = new ArrayList<>();
         for (Project project : projects) {
@@ -28,7 +28,7 @@ public class ProjectController {
         return candidates;
     }
 
-    @GetMapping("/company")
+    @GetMapping("get/projects/company")
     public ArrayList<Project> getCompanyProjects(@RequestParam("companyName") String companyName) {
         ArrayList<Project> candidates = new ArrayList<>();
         for (Project project : projects) {
@@ -39,17 +39,18 @@ public class ProjectController {
         return candidates;
     }
 
-    @PostMapping("")
+    @PostMapping("add/project")
     public ApiResponse addProject(@RequestBody Project project){
-        int id = 1;
-        if (!projects.isEmpty()) {
-            id = projects.get(projects.size() - 1).getId() + 1;
+        for (Project p : projects) {
+            if (p.getId() == project.getId()) {
+                return new ApiResponse("Project ID Already Exists!", "400");
+            }
         }
-        projects.add(new Project(id, project.getTitle(), project.getDescription(), project.getStatus(), project.getCompanyName()));
+        projects.add(new Project(project.getId(), project.getTitle(), project.getDescription(), project.getStatus(), project.getCompanyName()));
         return new ApiResponse("Project Added Successfully!", "200");
     }
 
-    @PutMapping("/{projectId}")
+    @PutMapping("update/projects/{projectId}")
     public ApiResponse updateProject(@PathVariable("projectId") int projectId, @RequestBody Project project) {
         // Get the project by its id
         Project projectToUpdate = null;
@@ -72,7 +73,7 @@ public class ProjectController {
         }
     }
 
-    @PutMapping("/{projectId}/status-toggle")
+    @PutMapping("update/projects/{projectId}/status-toggle")
     public ApiResponse toggleProjectStatus(@PathVariable("projectId") int projectId) {
         // Get the project by its id
         Project projectToUpdate = null;
@@ -97,7 +98,7 @@ public class ProjectController {
     }
 
 
-    @DeleteMapping("/{projectId}")
+    @DeleteMapping("delete/projects/{projectId}")
     public ApiResponse deleteProject(@PathVariable("projectId") int projectId) {
         // Get the project by its id
         Project projectToDelete = null;
