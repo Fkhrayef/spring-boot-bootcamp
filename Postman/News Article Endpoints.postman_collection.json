@@ -1,0 +1,195 @@
+{
+	"info": {
+		"_postman_id": "73c6321c-bf88-4a2d-bee3-ba9a23bf4cf0",
+		"name": "News Article Endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36845546",
+		"_collection_link": "https://test66-1743.postman.co/workspace/Spring-Boot~1f8e157b-0bfc-4022-9a53-f60156236e7f/collection/36845546-73c6321c-bf88-4a2d-bee3-ba9a23bf4cf0?action=share&source=collection_link&creator=36845546"
+	},
+	"item": [
+		{
+			"name": "All News Articles",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/get/news-articles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"get",
+						"news-articles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add News Article",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"123\",\r\n    \"title\": \"Java Bootcamp\",\r\n    \"author\": \"Faisal\",\r\n    \"content\": \"dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd\",\r\n    \"category\": \"sports\",\r\n    \"imageUrl\": \"ssssss\",\r\n    \"isPublished\": true,\r\n    \"publishDate\": \"2025-05-05\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/add/news-article",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"add",
+						"news-article"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update News Article",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"123\",\r\n    \"title\": \"Java Bootcamp\",\r\n    \"author\": \"Ahmad\",\r\n    \"content\": \"dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd\",\r\n    \"category\": \"sports\",\r\n    \"imageUrl\": \"ssssss\",\r\n    \"isPublished\": true,\r\n    \"publishDate\": \"2026-05-05\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/update/news-articles/123",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"update",
+						"news-articles",
+						"123"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete News Article",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/delete/news-articles/123",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"delete",
+						"news-articles",
+						"123"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Publish News Article",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/update/news-articles/publish/123",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"update",
+						"news-articles",
+						"publish",
+						"123"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "All Published News Articles",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/get/news-articles/published",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"get",
+						"news-articles",
+						"published"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Published News by Category",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/get/news-articles/category?category=sports",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"get",
+						"news-articles",
+						"category"
+					],
+					"query": [
+						{
+							"key": "category",
+							"value": "sports"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

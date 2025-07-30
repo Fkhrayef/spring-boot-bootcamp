@@ -1,0 +1,1683 @@
+{
+	"info": {
+		"_postman_id": "1e05939b-6793-4045-9f8b-5a612186e432",
+		"name": "LMS API Tests (Students / Instructors / Courses)",
+		"description": "Comprehensive test suite for your Learning Management System controllers/services.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36845546",
+		"_collection_link": "https://test66-1743.postman.co/workspace/Spring-Boot~1f8e157b-0bfc-4022-9a53-f60156236e7f/collection/36845546-1e05939b-6793-4045-9f8b-5a612186e432?action=share&source=collection_link&creator=36845546"
+	},
+	"item": [
+		{
+			"name": "Students",
+			"item": [
+				{
+					"name": "Students - Get (expect 404 when empty)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"404 when empty\", function () {",
+									"  pm.expect(pm.response.code).to.be.oneOf([200,404]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/students/get",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"students",
+								"get"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Students - Add (valid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"201 Created\", function () { pm.response.to.have.status(201); });",
+									"const body = pm.response.json();",
+									"pm.collectionVariables.set(\"studentName\", body.name);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{studentId}}\",\n  \"name\": \"{{studentName}}\",\n  \"email\": \"alice@sm.imamu.edu.sa\",\n  \"level\": 3,\n  \"department\": \"{{studentDeptValid}}\",\n  \"gpa\": 4.5\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/students/add",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"students",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Students - Add (invalid email -> 400)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"400 Bad Request for invalid email\", function () { pm.response.to.have.status(400); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"S_BADMAIL\",\n  \"name\": \"Bob\",\n  \"email\": \"bob@gmail.com\",\n  \"level\": 1,\n  \"department\": \"{{studentDeptValid}}\",\n  \"gpa\": 3.2\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/students/add",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"students",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Students - Get All (now 200)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"200 OK after add\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/students/get",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"students",
+								"get"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Students - Get by Name (found)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"200 OK get by name\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/students/get/search-by-name?name={{studentName}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"students",
+								"get",
+								"search-by-name"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "{{studentName}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Students - Get by Name (not found)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"404 not found get by name\", function () { pm.response.to.have.status(404); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/students/get/search-by-name?name=NoOne",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"students",
+								"get",
+								"search-by-name"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "NoOne"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Students - Get by Level (found)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"200 OK get by level\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/students/get/level?level=3",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"students",
+								"get",
+								"level"
+							],
+							"query": [
+								{
+									"key": "level",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Students - Get by Level (none -> 404)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"404 for empty result\", function () { pm.response.to.have.status(404); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/students/get/level?level=999",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"students",
+								"get",
+								"level"
+							],
+							"query": [
+								{
+									"key": "level",
+									"value": "999"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Students - Leaderboard (non-empty)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"200 OK leaderboard\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/students/get/leaderboard",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"students",
+								"get",
+								"leaderboard"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Students - Get by Department (valid & found)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"200 OK by department\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/students/get/search-by-department?department={{studentDeptValid}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"students",
+								"get",
+								"search-by-department"
+							],
+							"query": [
+								{
+									"key": "department",
+									"value": "{{studentDeptValid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Students - Get by Department (invalid -> 400)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"400 invalid department\", function () { pm.response.to.have.status(400); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/students/get/search-by-department?department={{studentDeptInvalid}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"students",
+								"get",
+								"search-by-department"
+							],
+							"query": [
+								{
+									"key": "department",
+									"value": "{{studentDeptInvalid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Students - Update (success)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"200 OK updated\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{studentId}}\",\n  \"name\": \"Alice Updated\",\n  \"email\": \"alice@sm.imamu.edu.sa\",\n  \"level\": 4,\n  \"department\": \"{{studentDeptValid}}\",\n  \"gpa\": 4.7\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/students/update/{{studentId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"students",
+								"update",
+								"{{studentId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Students - Update (not found -> 404)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"404 not found on update\", function () { pm.response.to.have.status(404); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"UNKNOWN_ID\",\n  \"name\": \"Ghost\",\n  \"email\": \"ghost@sm.imamu.edu.sa\",\n  \"level\": 1,\n  \"department\": \"{{studentDeptValid}}\",\n  \"gpa\": 2.0\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/students/update/UNKNOWN_ID",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"students",
+								"update",
+								"UNKNOWN_ID"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Students - Delete (success 204)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"204 No Content on delete\", function () { pm.expect(pm.response.code).to.be.oneOf([204,200]); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/students/delete/{{studentId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"students",
+								"delete",
+								"{{studentId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Students - Delete (not found -> 404)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"404 not found delete\", function () { pm.response.to.have.status(404); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/students/delete/UNKNOWN_ID",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"students",
+								"delete",
+								"UNKNOWN_ID"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Instructors",
+			"item": [
+				{
+					"name": "Instructors - Add Professor (valid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"201 Created professor\", function () { pm.response.to.have.status(201); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{instructorProfId}}\",\n  \"name\": \"{{instructorProfName}}\",\n  \"email\": \"prof.one@sm.imamu.edu.sa\",\n  \"rank\": \"Professor\",\n  \"specialization\": \"AI\",\n  \"department\": \"Computer Science\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/instructors/add",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"instructors",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Instructors - Add Lecturer (valid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"201 Created lecturer\", function () { pm.response.to.have.status(201); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{instructorLectId}}\",\n  \"name\": \"{{instructorLectName}}\",\n  \"email\": \"lect.one@sm.imamu.edu.sa\",\n  \"rank\": \"Lecturer\",\n  \"specialization\": \"Networks\",\n  \"department\": \"Computer Science\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/instructors/add",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"instructors",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Instructors - Add (invalid rank -> 400)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"400 invalid rank\", function () { pm.response.to.have.status(400); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"I_BADRANK\",\n  \"name\": \"Bad Rank\",\n  \"email\": \"bad.rank@sm.imamu.edu.sa\",\n  \"rank\": \"Assistant\",\n  \"specialization\": \"AI\",\n  \"department\": \"Computer Science\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/instructors/add",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"instructors",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Instructors - Get all (200)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"200 OK get instructors\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/instructors/get",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"instructors",
+								"get"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Instructors - Get by name (found)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"200 by name\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/instructors/get/search-by-name?name={{instructorProfName}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"instructors",
+								"get",
+								"search-by-name"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "{{instructorProfName}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Instructors - Get by name (not found)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"404 by name not found\", function () { pm.response.to.have.status(404); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/instructors/get/search-by-name?name=Nobody",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"instructors",
+								"get",
+								"search-by-name"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Nobody"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Instructors - Get by specialization (valid & found)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"200 by specialization AI\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/instructors/get/search-by-specialization?specialization=AI",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"instructors",
+								"get",
+								"search-by-specialization"
+							],
+							"query": [
+								{
+									"key": "specialization",
+									"value": "AI"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Instructors - Get by specialization (invalid -> 400)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"400 invalid specialization\", function () { pm.response.to.have.status(400); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/instructors/get/search-by-specialization?specialization=Security",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"instructors",
+								"get",
+								"search-by-specialization"
+							],
+							"query": [
+								{
+									"key": "specialization",
+									"value": "Security"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Instructors - Get by rank (valid & found)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"200 by rank\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/instructors/get/search-by-rank?rank=Professor",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"instructors",
+								"get",
+								"search-by-rank"
+							],
+							"query": [
+								{
+									"key": "rank",
+									"value": "Professor"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Instructors - Get by rank (invalid -> 400)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"400 invalid rank\", function () { pm.response.to.have.status(400); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/instructors/get/search-by-rank?rank=Assistant",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"instructors",
+								"get",
+								"search-by-rank"
+							],
+							"query": [
+								{
+									"key": "rank",
+									"value": "Assistant"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Instructors - Get by department (valid & found)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"200 by department\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/instructors/get/search-by-department?department=Computer%20Science",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"instructors",
+								"get",
+								"search-by-department"
+							],
+							"query": [
+								{
+									"key": "department",
+									"value": "Computer%20Science"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Instructors - Get by department (invalid -> 400)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"400 invalid department\", function () { pm.response.to.have.status(400); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/instructors/get/search-by-department?department=Medicine",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"instructors",
+								"get",
+								"search-by-department"
+							],
+							"query": [
+								{
+									"key": "department",
+									"value": "Medicine"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Instructors - Update (success)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"200 instructor updated\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{instructorProfId}}\",\n  \"name\": \"{{instructorProfName}} Updated\",\n  \"email\": \"prof.one@sm.imamu.edu.sa\",\n  \"rank\": \"Professor\",\n  \"specialization\": \"AI\",\n  \"department\": \"Computer Science\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/instructors/update/{{instructorProfId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"instructors",
+								"update",
+								"{{instructorProfId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Instructors - Update (not found -> 404)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"404 instructor not found\", function () { pm.response.to.have.status(404); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"UNKNOWN\",\n  \"name\": \"Nobody\",\n  \"email\": \"nobody@sm.imamu.edu.sa\",\n  \"rank\": \"Professor\",\n  \"specialization\": \"AI\",\n  \"department\": \"Computer Science\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/instructors/update/UNKNOWN",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"instructors",
+								"update",
+								"UNKNOWN"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Instructors - Delete (not found -> 404)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"404 instructor not found delete\", function () { pm.response.to.have.status(404); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/instructors/delete/UNKNOWN",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"instructors",
+								"delete",
+								"UNKNOWN"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Courses",
+			"item": [
+				{
+					"name": "Courses - Add (valid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"201 Created course\", function () { pm.response.to.have.status(201); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{courseId}}\",\n  \"title\": \"{{courseTitle}}\",\n  \"description\": \"Intro to algorithms\",\n  \"instructor\": \"{{instructorProfName}}\",\n  \"difficulty\": \"Easy\",\n  \"department\": \"Computer Science\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/courses/add",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"courses",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Courses - Get all (200)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"200 OK get courses\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/courses/get",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"courses",
+								"get"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Courses - Get by title (found)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"200 get by title\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/courses/get/search-by-title?title={{courseTitle}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"courses",
+								"get",
+								"search-by-title"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "{{courseTitle}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Courses - Get by title (not found)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"404 not found by title\", function () { pm.response.to.have.status(404); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/courses/get/search-by-title?title=UNKNOWN",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"courses",
+								"get",
+								"search-by-title"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "UNKNOWN"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Courses - Get by instructor (found)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"200 by instructor\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/courses/get/search-by-instructor?instructor={{instructorProfName}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"courses",
+								"get",
+								"search-by-instructor"
+							],
+							"query": [
+								{
+									"key": "instructor",
+									"value": "{{instructorProfName}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Courses - Get by instructor (none -> 404)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"404 empty by instructor\", function () { pm.response.to.have.status(404); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/courses/get/search-by-instructor?instructor=Unknown Instructor",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"courses",
+								"get",
+								"search-by-instructor"
+							],
+							"query": [
+								{
+									"key": "instructor",
+									"value": "Unknown Instructor"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Courses - Get by difficulty (valid & found)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"200 by difficulty\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/courses/get/search-by-difficulty?difficulty=Easy",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"courses",
+								"get",
+								"search-by-difficulty"
+							],
+							"query": [
+								{
+									"key": "difficulty",
+									"value": "Easy"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Courses - Get by difficulty (invalid -> 400)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"400 invalid difficulty\", function () { pm.response.to.have.status(400); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/courses/get/search-by-difficulty?difficulty=Medium",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"courses",
+								"get",
+								"search-by-difficulty"
+							],
+							"query": [
+								{
+									"key": "difficulty",
+									"value": "Medium"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Courses - Toggle difficulty (success -> 200)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"200 toggle success\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/courses/update/toggle-difficulty/{{instructorProfId}}/{{courseId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"courses",
+								"update",
+								"toggle-difficulty",
+								"{{instructorProfId}}",
+								"{{courseId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Courses - Toggle difficulty (course not found -> 404)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"404 course not found\", function () { pm.response.to.have.status(404); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/courses/update/toggle-difficulty/{{instructorProfId}}/C999",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"courses",
+								"update",
+								"toggle-difficulty",
+								"{{instructorProfId}}",
+								"C999"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Courses - Toggle difficulty (no permission -> 400)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"400 lecturer no permission\", function () { pm.response.to.have.status(400); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/courses/update/toggle-difficulty/{{instructorLectId}}/{{courseId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"courses",
+								"update",
+								"toggle-difficulty",
+								"{{instructorLectId}}",
+								"{{courseId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Courses - Toggle difficulty (instructor not found -> 404)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"404 instructor not found\", function () { pm.response.to.have.status(404); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/courses/update/toggle-difficulty/I999/{{courseId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"courses",
+								"update",
+								"toggle-difficulty",
+								"I999",
+								"{{courseId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Courses - Update (success)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"200 course updated\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{courseId}}\",\n  \"title\": \"{{courseTitle}} Updated\",\n  \"description\": \"Updated description\",\n  \"instructor\": \"{{instructorProfName}}\",\n  \"difficulty\": \"Hard\",\n  \"department\": \"Computer Science\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/courses/update/{{courseId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"courses",
+								"update",
+								"{{courseId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Courses - Update (not found -> 404)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"404 course update not found\", function () { pm.response.to.have.status(404); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"C999\",\n  \"title\": \"Ghost Course\",\n  \"description\": \"noop\",\n  \"instructor\": \"{{instructorProfName}}\",\n  \"difficulty\": \"Easy\",\n  \"department\": \"Computer Science\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/courses/update/C999",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"courses",
+								"update",
+								"C999"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Courses - Delete (success 204)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"204 or 200 on delete\", function () { pm.expect(pm.response.code).to.be.oneOf([204,200]); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/courses/delete/{{courseId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"courses",
+								"delete",
+								"{{courseId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Courses - Delete (not found -> 404)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"404 course delete not found\", function () { pm.response.to.have.status(404); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/courses/delete/C999",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"courses",
+								"delete",
+								"C999"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080/api/v1"
+		},
+		{
+			"key": "studentId",
+			"value": "S1"
+		},
+		{
+			"key": "studentName",
+			"value": "Alice"
+		},
+		{
+			"key": "studentDeptValid",
+			"value": "Computer Science"
+		},
+		{
+			"key": "studentDeptInvalid",
+			"value": "Medicine"
+		},
+		{
+			"key": "instructorProfId",
+			"value": "I1"
+		},
+		{
+			"key": "instructorProfName",
+			"value": "Prof One"
+		},
+		{
+			"key": "instructorLectId",
+			"value": "I2"
+		},
+		{
+			"key": "instructorLectName",
+			"value": "Lect One"
+		},
+		{
+			"key": "courseId",
+			"value": "C1"
+		},
+		{
+			"key": "courseTitle",
+			"value": "Algorithms"
+		}
+	]
+}

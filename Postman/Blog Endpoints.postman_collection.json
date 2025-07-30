@@ -1,0 +1,148 @@
+{
+	"info": {
+		"_postman_id": "f275d77f-f7a7-4980-a137-db18a8f84e71",
+		"name": "Blog Endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36845546",
+		"_collection_link": "https://test66-1743.postman.co/workspace/Spring-Boot~1f8e157b-0bfc-4022-9a53-f60156236e7f/collection/36845546-f275d77f-f7a7-4980-a137-db18a8f84e71?action=share&source=collection_link&creator=36845546"
+	},
+	"item": [
+		{
+			"name": "All Blogs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/get/blogs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"get",
+						"blogs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search by title",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/get/blogs/search?title=Service Layer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"get",
+						"blogs",
+						"search"
+					],
+					"query": [
+						{
+							"key": "title",
+							"value": "Service Layer"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Blog",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"123\",\r\n    \"title\": \"Service Layer\",\r\n    \"content\": \"Service Layer Service Layer Service Layer\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/add/blog",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"add",
+						"blog"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Blog",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"123\",\r\n    \"title\": \"Service Layer\",\r\n    \"content\": \"Service Layer Service Layer Service Layer\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/update/blogs/123",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"update",
+						"blogs",
+						"123"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Blog",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/delete/blogs/123",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"delete",
+						"blogs",
+						"123"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

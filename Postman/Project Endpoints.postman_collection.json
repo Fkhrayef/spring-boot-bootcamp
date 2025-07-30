@@ -1,0 +1,209 @@
+{
+	"info": {
+		"_postman_id": "f5583e48-ce9b-442a-801e-5ffdeb67d8d3",
+		"name": "Project Endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36845546",
+		"_collection_link": "https://test66-1743.postman.co/workspace/Spring-Boot~1f8e157b-0bfc-4022-9a53-f60156236e7f/collection/36845546-f5583e48-ce9b-442a-801e-5ffdeb67d8d3?action=share&source=collection_link&creator=36845546"
+	},
+	"item": [
+		{
+			"name": "All Projects",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/get/projects",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"get",
+						"projects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Projects by Title",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/get/projects/search?query=s",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"get",
+						"projects",
+						"search"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "s"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Projects by Company",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/get/projects/company?companyName=metaAI",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"get",
+						"projects",
+						"company"
+					],
+					"query": [
+						{
+							"key": "companyName",
+							"value": "metaAI"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Project",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"123\",\r\n    \"title\": \"supasupa\",\r\n    \"description\": \"supa project supa project supa project\",\r\n    \"status\": \"Not Started\",\r\n    \"companyName\": \"MetaAI\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/add/project",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"add",
+						"project"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Project",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 1,\r\n    \"title\": \"math\",\r\n    \"description\": \"math project\",\r\n    \"status\": \"Not Done\",\r\n    \"companyName\": \"Meta\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/update/projects/0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"update",
+						"projects",
+						"0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Toggle Project Status",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/update/projects/0/status-toggle",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"update",
+						"projects",
+						"0",
+						"status-toggle"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Project",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/delete/projects/0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"delete",
+						"projects",
+						"0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ignore This",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}

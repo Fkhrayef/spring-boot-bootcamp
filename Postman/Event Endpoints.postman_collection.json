@@ -1,0 +1,172 @@
+{
+	"info": {
+		"_postman_id": "5576694f-a985-45e7-b975-27f233946231",
+		"name": "Event Endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36845546",
+		"_collection_link": "https://test66-1743.postman.co/workspace/Spring-Boot~1f8e157b-0bfc-4022-9a53-f60156236e7f/collection/36845546-5576694f-a985-45e7-b975-27f233946231?action=share&source=collection_link&creator=36845546"
+	},
+	"item": [
+		{
+			"name": "All Events",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/get/events",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"get",
+						"events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Event by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/get/events/0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"get",
+						"events",
+						"0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Event",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"12\",\r\n    \"description\": \"Google Event! Apple Event!\",\r\n    \"capacity\": 26,\r\n    \"startDate\": \"2025-05-22 12:30:00\",\r\n    \"endDate\": \"2025-05-23 12:30:00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/add/event",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"add",
+						"event"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Event",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 1,\r\n    \"description\": \"A fun event!\",\r\n    \"capacity\": 40,\r\n    \"startDate\": \"2025-05-22 12:30:00\",\r\n    \"endDate\": \"2025-05-25 12:30:00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/update/events/0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"update",
+						"events",
+						"0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Capacity",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/update/events/0/capacity?capacity=30",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"update",
+						"events",
+						"0",
+						"capacity"
+					],
+					"query": [
+						{
+							"key": "capacity",
+							"value": "30"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Event",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/delete/events/0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"delete",
+						"events",
+						"0"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
