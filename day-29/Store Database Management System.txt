@@ -1,0 +1,161 @@
+# =============================================================================
+# STORE DATABASE MANAGEMENT SYSTEM
+# =============================================================================
+# This script creates a complete e-commerce store database with proper
+# relationships, constraints, and sample data for testing purposes.
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# DDL (DATA DEFINITION LANGUAGE) - Database & Table Structure
+# -----------------------------------------------------------------------------
+
+# Create the main database for the store application
+CREATE DATABASE store;
+
+# Countries table: Stores country information for user locations
+CREATE TABLE countries(
+    code INT PRIMARY KEY,
+    name VARCHAR(20) UNIQUE NOT NULL,
+    continent_name VARCHAR(20) NOT NULL
+);
+
+# Users table: Stores customer information and profiles
+CREATE TABLE users(
+    id INT PRIMARY KEY,
+    full_name VARCHAR(20) NOT NULL,
+    email VARCHAR(20) UNIQUE,
+    gender CHAR(1) NOT NULL CHECK ( gender = 'M' OR gender = 'F' ),
+    date_of_birth VARCHAR(15) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    country_code INT,
+    FOREIGN KEY (country_code) REFERENCES countries(code)
+);
+
+# Orders table: Tracks customer purchase orders
+CREATE TABLE orders(
+    id INT PRIMARY KEY,
+    user_id INT,
+    status VARCHAR(6) CHECK ( status = 'start' OR status = 'finish' ),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+# Products table: Catalog of available items for purchase
+CREATE TABLE products(
+    id INT PRIMARY KEY,
+    name VARCHAR(20) NOT NULL,
+    price INT DEFAULT 0,
+    status VARCHAR(10) CHECK ( status = 'valid' OR status = 'expired' ),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+# Junction table: Links orders with products
+CREATE TABLE order_product(
+    order_id INT,
+    product_id INT,
+    quantity INT DEFAULT 0,
+    PRIMARY KEY (order_id, product_id),
+    FOREIGN KEY (order_id) REFERENCES orders(id),
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);
+
+# =============================================================================
+# DATA MANIPULATION (DML - Data Manipulation Language)
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# INSERT OPERATIONS - Sample Data Population
+# -----------------------------------------------------------------------------
+
+# Populate countries table with major markets
+INSERT INTO countries VALUES (966, 'Saudi Arabia', 'Asia');
+INSERT INTO countries VALUES (39, 'Italy', 'Europe');
+INSERT INTO countries VALUES (971, 'UAE', 'Asia');
+INSERT INTO countries VALUES (1, 'USA', 'North America');
+INSERT INTO countries VALUES (82, 'South Korea', 'Asia');
+
+# Create sample user accounts for testing
+INSERT INTO users (id, full_name, email, gender, date_of_birth, country_code)
+VALUES (1, 'Faisal Alkhrayef', 'faisal@example.com', 'M', '11/03/2003', 966);
+INSERT INTO users (id, full_name, email, gender, date_of_birth, country_code)
+VALUES (2, 'Abdullah Alzahrani', 'abdullah@example.com', 'M', '25/07/2001', 966);
+INSERT INTO users (id, full_name, email, gender, date_of_birth, country_code)
+VALUES (3, 'Ibrahim Alshehri', 'ibrahim@example.com', 'M', '09/12/1998', 971);
+INSERT INTO users (id, full_name, email, gender, date_of_birth, country_code)
+VALUES (4, 'Aisha Alharbi', 'aisha@example.com', 'F', '03/04/2002', 971);
+INSERT INTO users (id, full_name, email, gender, date_of_birth, country_code)
+VALUES (5, 'Sara Alotaibi', 'sara@example.com', 'F', '19/11/2000', 1);
+
+# Create sample orders (mix of pending and completed)
+INSERT INTO orders (id, user_id, status)
+VALUES (1, 1, 'start');
+INSERT INTO orders (id, user_id, status)
+VALUES (2, 2, 'start');
+INSERT INTO orders (id, user_id, status)
+VALUES (3, 3, 'start');
+INSERT INTO orders (id, user_id, status)
+VALUES (4, 4, 'start');
+INSERT INTO orders (id, user_id, status)
+VALUES (5, 5, 'finish');
+
+# Add computer accessories to product catalog
+INSERT INTO products (id, name, price, status)
+VALUES (1, 'Wireless Mouse', 80, 'valid');
+INSERT INTO products (id, name, price, status)
+VALUES (2, 'Keyboard', 150, 'valid');
+INSERT INTO products (id, name, price, status)
+VALUES (3, 'USB-C Cable', 30, 'valid');
+INSERT INTO products (id, name, price, status)
+VALUES (4, 'Laptop Stand', 120, 'valid');
+INSERT INTO products (id, name, price, status)
+VALUES (5, 'Webcam', 200, 'expired');
+
+# Link products to orders with quantities
+INSERT INTO order_product VALUES (1, 1, 2);
+INSERT INTO order_product VALUES (2, 2, 1);
+INSERT INTO order_product VALUES (3, 3, 3);
+INSERT INTO order_product VALUES (4, 4, 1);
+INSERT INTO order_product VALUES (5, 5, 0);
+
+# -----------------------------------------------------------------------------
+# UPDATE OPERATIONS - Data Modifications
+# -----------------------------------------------------------------------------
+
+# Standardize country names to full official names
+UPDATE countries SET name = 'United Arab Emirates' WHERE code = 971;
+UPDATE countries SET name = 'United States' WHERE code = 1;
+# Correct user birth date (data fix)
+UPDATE users SET date_of_birth = '11/05/2003' WHERE id = 1;
+# Process all pending orders to completion
+UPDATE orders SET status = 'finish' WHERE status = 'start';
+# Apply discount to laptop stand (price reduction)
+UPDATE products SET price = 60 WHERE id = 4;
+# Bulk quantity increase for small orders (inventory adjustment)
+UPDATE order_product SET quantity = quantity + 20 WHERE quantity < 3;
+
+# -----------------------------------------------------------------------------
+# DELETE OPERATIONS - Data Cleanup
+# -----------------------------------------------------------------------------
+# Note: Order matters due to foreign key constraints (child records first)
+
+# Remove orders with zero quantity (empty cart cleanup)
+DELETE FROM order_product WHERE quantity = 0;
+# Remove discontinued products from catalog
+DELETE FROM products WHERE status = 'expired';
+# Archive completed orders (business rule: remove after processing)
+DELETE FROM orders WHERE status = 'finish';
+# Remove inactive user accounts
+DELETE FROM users WHERE id = 5;
+# Remove countries with no active users
+DELETE FROM countries WHERE code = 1;
+
+# =============================================================================
+# DATA RETRIEVAL (DQL - Data Query Language)
+# =============================================================================
+
+# View all remaining data after operations
+SELECT * FROM countries;
+SELECT * FROM users;
+SELECT * FROM orders;
+SELECT * FROM products;
+SELECT * FROM order_product;
