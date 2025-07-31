@@ -1,0 +1,261 @@
+# =============================================================================
+# LOGISTICS DATABASE MANAGEMENT SYSTEM
+# =============================================================================
+# This script simulates a complete logistics workflow (FedEx/Aramex-style)
+# involving shipping, tracking, and delivery.
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# DDL (DATA DEFINITION LANGUAGE) - Database & Table Structure
+# -----------------------------------------------------------------------------
+
+# Create the main database for the logistics application
+CREATE DATABASE logistics;
+
+# Locations table: Stores warehouses, hubs, customer addresses, etc.
+CREATE TABLE locations(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(20) NOT NULL,
+    national_address VARCHAR(8) NOT NULL,
+    location_type ENUM(
+        'warehouse',
+        'customer',
+        'hub',
+        'drop_off_point',
+        'pickup_station',
+        'customs'
+        ) NOT NULL
+);
+
+# Customers table: Registers sender/recipient profiles linked to locations
+CREATE TABLE customers(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(20) NOT NULL,
+    email VARCHAR(30) UNIQUE NOT NULL,
+    phone VARCHAR(10) UNIQUE NOT NULL,
+    location_id INT NOT NULL,
+    FOREIGN KEY (location_id) REFERENCES locations(id)
+);
+
+# Orders table: Logs customer shipment requests
+CREATE TABLE orders(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    customer_id INT NOT NULL,
+    status ENUM(
+        'received',
+        'processing',
+        'fulfilled',
+        'cancelled',
+        'on_hold'
+        ) NOT NULL,
+    order_date DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    FOREIGN KEY (customer_id) REFERENCES customers(id)
+);
+
+# Transport Units table: Tracks vehicles used to move shipments
+CREATE TABLE transport_units(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    carrier_name VARCHAR(12) NOT NULL,
+    vehicle_type ENUM(
+        'van',
+        'truck',
+        'bike',
+        'airplane',
+        'drone',
+        'cargo_ship'
+        ) NOT NULL,
+    license_plate VARCHAR(7) NOT NULL,
+    driver_name VARCHAR(20) NOT NULL,
+    driver_license VARCHAR(10) NOT NULL
+);
+
+# Shipments table: Connects orders to transport units and their routes
+CREATE TABLE shipments(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    order_id INT NOT NULL,
+    transport_unit_id INT NOT NULL,
+    origin_location_id INT NOT NULL,
+    destination_location_id INT NOT NULL,
+    departure_time DATETIME NOT NULL,
+    arrival_time DATETIME NOT NULL,
+    status ENUM(
+        'pending',
+        'dispatched',
+        'in_transit',
+        'delayed',
+        'out_for_delivery',
+        'delivered',
+        'failed',
+        'returned'
+        ) NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES orders(id),
+    FOREIGN KEY (transport_unit_id) REFERENCES transport_units(id),
+    FOREIGN KEY (origin_location_id) REFERENCES locations(id),
+    FOREIGN KEY (destination_location_id) REFERENCES locations(id)
+);
+
+# Packages table: Contains physical package info linked to a shipment
+CREATE TABLE packages(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    shipment_id INT NOT NULL,
+    weight FLOAT NOT NULL CHECK ( weight > 0 ),
+    length FLOAT NOT NULL CHECK ( length > 0 ),
+    width FLOAT NOT NULL CHECK ( width > 0 ),
+    height FLOAT NOT NULL CHECK ( height > 0 ),
+    content_description VARCHAR(50) NOT NULL,
+    declared_value FLOAT NOT NULL CHECK ( declared_value > 0 ),
+    tracking_number VARCHAR(20) UNIQUE NOT NULL,
+    FOREIGN KEY (shipment_id) REFERENCES shipments(id)
+);
+
+# Tracking Events table: Logs real-time tracking updates for packages
+CREATE TABLE tracking_events(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    shipment_id INT NOT NULL,
+    location_id INT NOT NULL,
+    timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    status ENUM(
+        'scanned_in',
+        'scanned_out',
+        'in_transit',
+        'arrived_at_hub',
+        'delayed',
+        'out_for_delivery',
+        'delivered',
+        'delivery_failed',
+        'returned_to_sender'
+        ) NOT NULL,
+    FOREIGN KEY (shipment_id) REFERENCES shipments(id),
+    FOREIGN KEY (location_id) REFERENCES locations(id)
+);
+
+# =============================================================================
+# DATA MANIPULATION (DML - Data Manipulation Language)
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# INSERT OPERATIONS - Sample Data Population
+# -----------------------------------------------------------------------------
+
+# 1. Insert two locations: a hub and a customer address
+INSERT INTO locations (name, national_address, location_type)
+VALUES
+    ('Riyadh Central Hub', 'RDRD3456', 'hub'),
+    ('Faisal Home', 'FSFS4321', 'customer');
+
+# 2. Insert customer Faisal
+INSERT INTO customers (name, email, phone, location_id)
+VALUES ('Faisal', 'faisal@example.com', '0551234567', 2);
+
+# 3. Insert order placed by Faisal
+INSERT INTO orders (customer_id, status)
+VALUES (1, 'received');
+
+# 4. Insert transport unit
+INSERT INTO transport_units (carrier_name, vehicle_type, license_plate, driver_name, driver_license)
+VALUES ('Aramex', 'truck', 'RUH1234', 'Saad', 'DL98765432');
+
+# 5. Insert a shipment for that order
+INSERT INTO shipments (
+    order_id, transport_unit_id, origin_location_id, destination_location_id,
+    departure_time, arrival_time, status
+)
+VALUES (
+           1, 1, 1, 2,
+           NOW(), NOW() + INTERVAL 2 DAY, 'dispatched'
+       );
+
+# 6. Insert a package in that shipment
+INSERT INTO packages (
+    shipment_id, weight, length, width, height, content_description,
+    declared_value, tracking_number
+)
+VALUES (
+           1, 1.8, 25.0, 15.0, 10.0, 'Electronics', 200.00, 'TRK654321987'
+       );
+
+# 7. Insert tracking events (in and out of hub, then out for delivery)
+INSERT INTO tracking_events (shipment_id, location_id, status)
+VALUES
+    (1, 1, 'scanned_in'),
+    (1, 1, 'scanned_out'),
+    (1, 2, 'out_for_delivery');
+
+# -----------------------------------------------------------------------------
+# UPDATE OPERATIONS - Data Modifications
+# -----------------------------------------------------------------------------
+
+# Update customer email
+UPDATE customers
+SET email = 'faisal.new@example.com'
+WHERE name = 'Faisal';
+
+# Update order status
+UPDATE orders
+SET status = 'fulfilled'
+WHERE id = 1;
+
+# Update driver name
+UPDATE transport_units
+SET driver_name = 'Saad Alharbi'
+WHERE id = 1;
+
+# Update shipment status
+UPDATE shipments
+SET status = 'delivered'
+WHERE id = 1;
+
+# Update package declared value
+UPDATE packages
+SET declared_value = 220.00
+WHERE tracking_number = 'TRK654321987';
+
+# Update last tracking event to mark as delivered
+UPDATE tracking_events
+SET status = 'delivered'
+WHERE shipment_id = 1 AND location_id = 2;
+
+# -----------------------------------------------------------------------------
+# DELETE OPERATIONS - Data Cleanup
+# -----------------------------------------------------------------------------
+# Note: Order matters due to foreign key constraints (child records first)
+
+# Delete tracking events after delivery
+DELETE FROM tracking_events
+WHERE shipment_id = 1;
+
+# Delete package after testing
+DELETE FROM packages
+WHERE tracking_number = 'TRK654321987';
+
+# Delete shipment record
+DELETE FROM shipments
+WHERE id = 1;
+
+# Delete transport unit
+DELETE FROM transport_units
+WHERE id = 1;
+
+# Delete order
+DELETE FROM orders
+WHERE id = 1;
+
+# Delete customer
+DELETE FROM customers
+WHERE name = 'Faisal';
+
+# Delete both locations
+DELETE FROM locations
+WHERE name IN ('Riyadh Central Hub', 'Faisal Home');
+
+# =============================================================================
+# DATA RETRIEVAL (DQL - Data Query Language)
+# =============================================================================
+
+SELECT * FROM locations;
+SELECT * FROM customers;
+SELECT * FROM orders;
+SELECT * FROM shipments;
+SELECT * FROM transport_units;
+SELECT * FROM packages;
+SELECT * FROM tracking_events
