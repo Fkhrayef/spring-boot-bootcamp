@@ -32,4 +32,10 @@ public class AddressController {
         addressService.updateAddress(addressDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Address updated successfully"));
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteAddress(@PathVariable Integer id){
+        addressService.deleteAddress(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }

@@ -42,4 +42,13 @@ public class AddressService {
         address.setBuildingNumber(addressDTO.getBuildingNumber());
         addressRepository.save(address);
     }
+
+    public void deleteAddress(Integer id){
+        Address address = addressRepository.findAddressById(id);
+        if (address == null) {
+            throw new ApiException("Address not found");
+        }
+
+        addressRepository.delete(address);
+    }
 }

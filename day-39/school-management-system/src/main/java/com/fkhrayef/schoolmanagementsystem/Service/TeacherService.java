@@ -18,6 +18,14 @@ public class TeacherService {
         return teacherRepository.findAll();
     }
 
+    public Teacher getTeacherById(Integer id){
+        Teacher teacher = teacherRepository.findTeacherById(id);
+        if (teacher == null) {
+            throw new ApiException("Teacher not found");
+        }
+        return teacher;
+    }
+
     public void addTeacher(Teacher teacher){
         teacherRepository.save(teacher);
     }

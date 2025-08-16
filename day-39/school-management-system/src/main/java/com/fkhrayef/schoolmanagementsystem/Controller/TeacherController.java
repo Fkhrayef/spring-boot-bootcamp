@@ -21,6 +21,11 @@ public class TeacherController {
         return ResponseEntity.status(HttpStatus.OK).body(teacherService.getAllTeachers());
     }
 
+    @GetMapping("/get/{id}")
+    public ResponseEntity<?> getTeacherById(@PathVariable Integer id){
+        return ResponseEntity.status(HttpStatus.OK).body(teacherService.getTeacherById(id));
+    }
+
     @PostMapping("/add")
     public ResponseEntity<?> addTeacher(@Valid @RequestBody Teacher teacher){
         teacherService.addTeacher(teacher);
