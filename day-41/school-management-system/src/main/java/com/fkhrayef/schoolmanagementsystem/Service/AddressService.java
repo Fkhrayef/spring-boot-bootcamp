@@ -49,6 +49,11 @@ public class AddressService {
             throw new ApiException("Address not found");
         }
 
+        Teacher teacher = address.getTeacher();
+        if (teacher != null) {
+            teacher.setAddress(null);
+            teacherRepository.save(teacher);
+        }
         addressRepository.delete(address);
     }
 }
